@@ -153,11 +153,10 @@ public class CitaServiceImpl implements CitaService {
         if (!cita.getIdPaciente().equals(request.idPaciente()))
             validarPacienteSinCitaActiva(request.idPaciente());
 
-        if (!cita.getIdMedico().equals(request.idMedico())) {
+        if (!cita.getIdMedico().equals(request.idMedico()))
             validarMedicoActivoDisponible(medico);
-            actualizarDisponibilidadMedico(cita.getIdMedico(), DisponibilidadMedico.DISPONIBLE.getCodigo());
-            actualizarDisponibilidadMedico(request.idMedico(), DisponibilidadMedico.NO_DISPONIBLE.getCodigo());
-        }
+
+        Long idMedicoAnterior = cita.getIdMedico();
 
         log.info("Actualizando cita con id: {}", id);
 
@@ -170,6 +169,11 @@ public class CitaServiceImpl implements CitaService {
         citaRepository.saveAndFlush(cita);
 
         log.info("Cita actualizada");
+
+        if (!idMedicoAnterior.equals(cita.getIdMedico())) {
+            actualizarDisponibilidadMedico(idMedicoAnterior, DisponibilidadMedico.DISPONIBLE.getCodigo());
+            cambiarDisponibilidadMedicoSegunEstadoCita(cita.getIdMedico(), cita.getEstadoCita());
+        }
 
         return citaMapper.entidadAResponse(
                 cita,
