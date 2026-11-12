@@ -1,0 +1,42 @@
+package com.ramon.commons.utils;
+
+import com.ramon.commons.exceptions.DatoInvalidoException;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
+public class StringCustomUtils {
+
+    private static final DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+    public static void validarNoVacio(String texto, String mensaje) {
+        if (texto == null || texto.isBlank())
+            throw new DatoInvalidoException(mensaje);
+    }
+
+    public static void validarTamanio(String texto, Integer min, Integer max, String mensaje) {
+        validarNoVacio(texto, mensaje);
+
+        if (texto.length() < min || texto.length() > max)
+            throw new DatoInvalidoException(mensaje);
+    }
+
+    public static void validarFormatoHora(String hora, String mensaje) {
+        validarNoVacio(hora, mensaje);
+
+        if (!hora.trim().matches("^([01][0-9]|2[0-3]):[0-5][0-9]$"))
+            throw new DatoInvalidoException(mensaje);
+    }
+
+    public static String normalizarTexto(String texto) {
+        return texto.toLowerCase()
+                .replace("á", "a").replace("é", "e")
+                .replace("í", "i").replace("ó", "o")
+                .replace("ú", "u").replace("ü", "u")
+                .replace("ñ", "n");
+    }
+
+    public static String localDateAString(LocalDate fecha) {
+        return fecha == null ? null : fecha.format(formato);
+    }
+}

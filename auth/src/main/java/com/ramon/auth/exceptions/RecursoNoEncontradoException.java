@@ -1,0 +1,7 @@
+package com.ramon.auth.exceptions;
+
+public class RecursoNoEncontradoException extends RuntimeException {
+    public RecursoNoEncontradoException(String message) {
+        super(message);
+    }
+}
