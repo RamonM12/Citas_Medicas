@@ -72,10 +72,10 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
     // 503 : El servicio remoto esta caido o no responde
     @ExceptionHandler({ServicioNoDisponibleException.class, RetryableException.class})
-    public ProblemDetail handleServicioNoDisponible(EntidadRelacionadaException e){
+    public ProblemDetail handleServicioNoDisponible(Exception e){
         log.warn("Servicio remoto no disponible", e);
         return ProblemDetail.forStatusAndDetail(HttpStatus.SERVICE_UNAVAILABLE,
-                "Un servicio requerdio no esta disponible. Intente mas tarde");
+                "Un servicio requerido no esta disponible. Intente mas tarde");
     }
 
     // 400: falló @Positive, @Min... en un @PathVariable o @RequestParam
